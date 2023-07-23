@@ -26,8 +26,10 @@ const RNInput: React.FC<Props> = ({textInput, deleteIcon, onDelete}) => {
           width: deleteIcon ? '85%' : '100%',
           height: hp(5),
           marginVertical: hp(1),
+          color: 'black',
         }}
       />
+
       {deleteIcon ? (
         <TouchableOpacity style={{alignSelf: 'center'}} onPress={onDelete}>
           <Image

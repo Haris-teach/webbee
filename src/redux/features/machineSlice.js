@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import {createSlice} from '@reduxjs/toolkit';
-import {act} from 'react-test-renderer';
 
 const initialState = {
   allMachines: [],
@@ -43,13 +42,16 @@ export const machineSlice = createSlice({
       const myObject = {};
 
       action.payload.map((i, index) => {
-        let t = 'bull Dozer';
+        let t = 'Bull dozar';
         if (i.toLowerCase() == t.toLowerCase()) {
         } else {
           myObject[i] = '';
         }
       });
       state.temp.push(myObject);
+    },
+    removeBullDozer: (state, action) => {
+      state.temp = action.payload;
     },
     getAll: (state, action) => {
       state.allMachines = state.temp;
@@ -65,6 +67,7 @@ export const {
   updateKeyValue,
   setMachinebyName,
   setNewArray,
+  removeBullDozer,
   getAll,
 } = machineSlice.actions;
 

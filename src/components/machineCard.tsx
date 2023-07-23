@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,10 +7,12 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+import moment from 'moment';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import RNInput from './RNInput';
 import {
   Menu,
@@ -22,6 +24,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   addAttribute,
   deleteObjKey,
+  removeBullDozer,
   removeMachine,
   updateKeyValue,
 } from '../redux/features/machineSlice';
@@ -34,10 +37,25 @@ interface Props {
 
 const MachineCard: React.FC<Props> = props => {
   const dispatch = useDispatch();
-  const {title, properties, index, key} = props;
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const {index} = props;
   const {temp} = useSelector(state => state.machineSlice);
 
   const keyValuePairs = Object.entries(temp[index]);
+
+  const deleteBullDozer = () => {
+    let tem = temp.filter((i, ind) => ind != index);
+
+    dispatch(removeBullDozer(tem));
+  };
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(false);
+    setDate(currentDate);
+    console.log(date);
+  };
 
   return (
     <View style={styles.container}>
@@ -46,15 +64,17 @@ const MachineCard: React.FC<Props> = props => {
           <RNInput
             textInput={{
               label: `${key}`,
-
               mode: 'outlined',
-              value: value,
+              onFocus: () => {
+                if (key == 'Date') setShowDatePicker(true);
+              },
+              value: key == 'Date' ? moment(date).format('DD-mm-yyyy') : '',
             }}
           />
         );
       })}
 
-      <TouchableOpacity style={styles.removeBtnStyle}>
+      <TouchableOpacity style={styles.removeBtnStyle} onPress={deleteBullDozer}>
         <Image
           source={require('../../assets/images.jpeg')}
           style={styles.removeImageStyle}
@@ -62,6 +82,14 @@ const MachineCard: React.FC<Props> = props => {
         />
         <Text style={styles.removeTextStyle}>Remove</Text>
       </TouchableOpacity>
+      {showDatePicker && (
+        <DateTimePicker
+          value={date}
+          mode="date"
+          display="default"
+          onChange={onChange}
+        />
+      )}
     </View>
   );
 };

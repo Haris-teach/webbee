@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -14,14 +14,13 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import MachineCard from '../components/machineCard';
-import {setNewArray} from '../redux/features/machineSlice';
+import {removeBullDozer, setNewArray} from '../redux/features/machineSlice';
 
 interface Props {}
 
 const BullDozer: React.FC<Props> = props => {
   const dispatch = useDispatch();
   const {bullDozer, temp} = useSelector((state: any) => state.machineSlice);
-  console.log('emp:=>', temp);
 
   let machine = bullDozer[0];
 
